@@ -13,5 +13,6 @@ namespace CafeMenuMvc.Services.Abstract
     {
         Task<ResponseDto<PRODUCT>> Create(MProduct productDto);
         Task<ResponseDto<PRODUCT>> Update(MProduct productDto);
+        Task<ResponseDto<int>> Delete(MProduct productDto);
     }
 }

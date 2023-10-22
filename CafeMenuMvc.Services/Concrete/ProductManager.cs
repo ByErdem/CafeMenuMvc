@@ -70,5 +70,28 @@ namespace CafeMenuMvc.Services.Concrete
 
             return rsp;
         }
+
+        public async Task<ResponseDto<int>> Delete(MProduct productDto)
+        {
+            var rsp = new ResponseDto<int>();
+            CafeMenuEntities entity = new CafeMenuEntities();
+
+            var product = await entity.PRODUCT.FirstOrDefaultAsync(x=>x.PRODUCTID== productDto.PRODUCTID);
+            if (product != null)
+            {
+                entity.PRODUCT.Remove(product);
+                entity.SaveChanges();
+
+                rsp.ResultStatus = ResultStatus.Success;
+                rsp.SuccessMessage = $"{productDto.PRODUCTNAME} adlı ürün başarıyla silindi";
+            }
+            else
+            {
+                rsp.ResultStatus= ResultStatus.Error;
+                rsp.ErrorMessage = "Böyle bir ürün bulunamadı.";
+            }
+
+            return rsp;
+        }
     }
 }

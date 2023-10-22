@@ -35,10 +35,10 @@ $(function() {
 
 
 	/* p-scroll */
-	const ps3 = new PerfectScrollbar('.Activity-scroll', {
-	  useBothWheelAxes:true,
-	  suppressScrollX:true,
-	});
+	//const ps3 = new PerfectScrollbar('.Activity-scroll', {
+	//  useBothWheelAxes:true,
+	//  suppressScrollX:true,
+	//});
 	
    
    

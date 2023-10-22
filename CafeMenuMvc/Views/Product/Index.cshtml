@@ -12,19 +12,19 @@
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
 
-                <button type="submit" class="btn btn-success btnNew">Yeni Ürün</button>
+                <button type="button" class="btn btn-success btnNewProduct" data-bs-target="#FrmNewProduct" data-bs-toggle="modal">New Product</button>
 
                 <p class="tx-12 text-muted mb-3"></p>
                 <div class="table-responsive mb-0">
                     <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
                         <thead>
                             <tr>
-                                <th>Resim</th>
-                                <th>Ürün Adı</th>
-                                <th>Kategori</th>
-                                <th>Fiyat</th>
-                                <th>Oluşturma Tarihi</th>
-                                <th>İşlem</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Created Date</th>
+                                <th>Process</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -40,7 +40,7 @@
                                 <td>1200 TL</td>
                                 <td>15 March 2020</td>
                                 <td>
-                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-bolt"></i></button>
+                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
                                     <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
                                 </td>
                             </tr>
@@ -52,5 +52,114 @@
     </div>
 </div>
 
+<div class="row row-sm ">
+    <div class="col-md-12 col-xl-12">
+        <div class="card overflow-hidden review-project">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title mg-b-10">Product Property</h4>
+                    <i class="mdi mdi-dots-horizontal text-gray"></i>
+                </div>
+
+                <button type="button" class="btn btn-success btnNewProperty">New Property</button>
+
+                <p class="tx-12 text-muted mb-3"></p>
+                <div class="table-responsive mb-0">
+                    <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
+                        <thead>
+                            <tr>
+                                <th>Key</th>
+                                <th>Value</th>
+                                <th>Process</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Tatlı
+                                </td>
+                                <td>İrmik Helvası</td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
+                                    <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="FrmNewProduct">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">New Product</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group">
+                        <label>Product Name</label> <input class="form-control txtName" placeholder="Enter product name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select class="form-control select2">
+                            <option label="Choose one">
+                            </option>
+                            <option value="Firefox">
+                                Firefox
+                            </option>
+                            <option value="Chrome">
+                                Chrome
+                            </option>
+                            <option value="Safari">
+                                Safari
+                            </option>
+                            <option value="Opera">
+                                Opera
+                            </option>
+                            <option value="Internet Explorer">
+                                Internet Explorer
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label> <input class="form-control txtPrice" placeholder="Enter the price" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Photo</label>
+                        <input type="file" class="dropify" data-height="200" />
+                    </div>
+                    <button class="btn btn-primary btn-block">Save Category</button>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn ripple btn-primary" type="button">Save changes</button>
+                <button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!--- Product.js --->
 <script src="@Url.Content("~/Scripts/Views/Product/Product.js")"></script>
+
+<!--- Fileuploads js --->
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fileuploads/js/fileupload.js")"></script>
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fileuploads/js/file-upload.js")"></script>
+
+
+<!--- Fancy uploader js --->
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fancyuploder/jquery.ui.widget.js")"></script>
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fancyuploder/jquery.fileupload.js")"></script>
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fancyuploder/jquery.iframe-transport.js")"></script>
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fancyuploder/jquery.fancy-fileupload.js")"></script>
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/fancyuploder/fancy-uploader.js")"></script>
+

@@ -173,6 +173,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPropertyController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -17842,6 +17843,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Images\" />
+    <Folder Include="Views\ProductProperty\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -23,9 +23,21 @@ namespace CafeMenuMvc.Controllers
             return View();
         }
 
-        public async Task<ActionResult> SignIn(MProduct productDto)
+        public async Task<ActionResult> Create(MProduct productDto)
         {
             var result = await _productService.Create(productDto);
+            return Json(result);
+        }
+
+        public async Task<ActionResult> Update(MProduct productDto)
+        {
+            var result = await _productService.Update(productDto);
+            return Json(result);
+        }
+
+        public async Task<ActionResult> Delete(MProduct productDto)
+        {
+            var result = await _productService.Delete(productDto);
             return Json(result);
         }
     }

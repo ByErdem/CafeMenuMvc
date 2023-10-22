@@ -23,8 +23,10 @@ namespace CafeMenuMvc
             Mapper.Initialize(opt => opt.AddProfile<MappingProfile>());
 
             var builder = new ContainerBuilder();
-            builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<EncryptionManager>().As<IEncryptionService>().AsSelf().SingleInstance();
+            builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProductManager>().As<IProductService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<ProductPropertyManager>().As<IProductPropertyService>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
