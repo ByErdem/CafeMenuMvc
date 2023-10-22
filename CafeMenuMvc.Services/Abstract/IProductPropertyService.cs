@@ -9,8 +9,8 @@ namespace CafeMenuMvc.Services.Abstract
 {
     public interface IProductPropertyService
     {
-        Task<ResponseDto<int>> AddProperty(ProductPropertyDto productPropertyDto);
-        Task<ResponseDto<int>> UpdateProperty(ProductPropertyDto productPropertyDto);
-        Task<ResponseDto<int>> DeleteProperty(ProductPropertyDto productPropertyDto);
+        Task<ResponseDto<int>> Create(ProductPropertyDto productPropertyDto);
+        Task<ResponseDto<int>> Update(ProductPropertyDto productPropertyDto);
+        Task<ResponseDto<int>> Delete(ProductPropertyDto productPropertyDto);
     }
 }

@@ -79,7 +79,7 @@ namespace CafeMenuMvc.Services.Concrete
             var product = await entity.PRODUCT.FirstOrDefaultAsync(x=>x.PRODUCTID== productDto.PRODUCTID);
             if (product != null)
             {
-                entity.PRODUCT.Remove(product);
+                product.ISDELETED = true;
                 entity.SaveChanges();
 
                 rsp.ResultStatus = ResultStatus.Success;
@@ -88,6 +88,29 @@ namespace CafeMenuMvc.Services.Concrete
             else
             {
                 rsp.ResultStatus= ResultStatus.Error;
+                rsp.ErrorMessage = "Böyle bir ürün bulunamadı.";
+            }
+
+            return rsp;
+        }
+
+        public async Task<ResponseDto<int>> HardDelete(MProduct productDto)
+        {
+            var rsp = new ResponseDto<int>();
+            CafeMenuEntities entity = new CafeMenuEntities();
+
+            var product = await entity.PRODUCT.FirstOrDefaultAsync(x => x.PRODUCTID == productDto.PRODUCTID);
+            if (product != null)
+            {
+                entity.PRODUCT.Remove(product);
+                entity.SaveChanges();
+
+                rsp.ResultStatus = ResultStatus.Success;
+                rsp.SuccessMessage = $"{productDto.PRODUCTNAME} adlı ürün başarıyla silindi";
+            }
+            else
+            {
+                rsp.ResultStatus = ResultStatus.Error;
                 rsp.ErrorMessage = "Böyle bir ürün bulunamadı.";
             }
 

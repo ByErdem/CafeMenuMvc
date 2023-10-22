@@ -13,7 +13,7 @@ namespace CafeMenuMvc.Services.Concrete
 {
     public class ProductPropertyManager:IProductPropertyService
     {
-        public async Task<ResponseDto<int>> AddProperty(ProductPropertyDto productPropertyDto)
+        public async Task<ResponseDto<int>> Create(ProductPropertyDto productPropertyDto)
         {
             var rsp = new ResponseDto<int>();
             CafeMenuEntities entity = new CafeMenuEntities();
@@ -42,7 +42,7 @@ namespace CafeMenuMvc.Services.Concrete
             return rsp;
         }
 
-        public async Task<ResponseDto<int>> UpdateProperty(ProductPropertyDto productPropertyDto)
+        public async Task<ResponseDto<int>> Update(ProductPropertyDto productPropertyDto)
         {
             var rsp = new ResponseDto<int>();
             CafeMenuEntities entity = new CafeMenuEntities();
@@ -67,7 +67,7 @@ namespace CafeMenuMvc.Services.Concrete
             return rsp;
         }
 
-        public async Task<ResponseDto<int>> DeleteProperty(ProductPropertyDto productPropertyDto)
+        public async Task<ResponseDto<int>> Delete(ProductPropertyDto productPropertyDto)
         {
             var rsp = new ResponseDto<int>();
             CafeMenuEntities entity = new CafeMenuEntities();
