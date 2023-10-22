@@ -1,4 +1,5 @@
-﻿using CafeMenuMvc.Entity.Concrete;
+﻿using CafeMenuMvc.Data;
+using CafeMenuMvc.Entity.Concrete;
 using CafeMenuMvc.Entity.Dtos;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace CafeMenuMvc.Services.Abstract
 {
     public interface IProductService
     {
-        Task<ResponseDto<MProduct>> Create(MProduct productDto);
+        Task<ResponseDto<PRODUCT>> Create(MProduct productDto);
+        Task<ResponseDto<PRODUCT>> Update(MProduct productDto);
     }
 }

@@ -9,7 +9,10 @@ namespace CafeMenuMvc.Models.Profiles
         public MappingProfile()
         {
             CreateMap<USER, MUser>().ReverseMap();
-            CreateMap<MUser, MUser>().ReverseMap();
+            CreateMap<MUser, USER>().ReverseMap();
+
+            CreateMap<PRODUCT, MProduct>().ReverseMap();
+            CreateMap<MProduct, PRODUCT>().ReverseMap();
         }
     }
 }

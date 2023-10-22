@@ -4,7 +4,6 @@ using CafeMenuMvc.Entity.Concrete;
 using CafeMenuMvc.Entity.Dtos;
 using CafeMenuMvc.Models.ComplexTypes;
 using CafeMenuMvc.Services.Abstract;
-using CafeMenuMvc.Shared.Utilities.Security;
 using System.Data.Entity;
 using System.Threading.Tasks;
 
@@ -19,9 +18,7 @@ namespace CafeMenuMvc.Services.Concrete
         {
             _mapper = mapper;
             _encryptionService = encryptionService;
-
         }
-
 
         public async Task<ResponseDto<MUser>> Register(UserRegisterDto user)
         {

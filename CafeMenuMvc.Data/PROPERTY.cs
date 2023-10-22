@@ -14,7 +14,7 @@ namespace CafeMenuMvc.Data
     
     public partial class PROPERTY
     {
-        public int PROPERTYID { get; set; }
+        public string PROPERTYID { get; set; }
         public string KEY { get; set; }
         public string VALUE { get; set; }
     }

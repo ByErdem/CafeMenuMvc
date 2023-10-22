@@ -35,13 +35,13 @@
           </Key>
           <Property Name="PRODUCTPROPERTYID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PRODUCTID" Type="int" />
-          <Property Name="PROPERTYID" Type="int" />
+          <Property Name="PROPERTYID" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PROPERTY">
           <Key>
             <PropertyRef Name="PROPERTYID" />
           </Key>
-          <Property Name="PROPERTYID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PROPERTYID" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="KEY" Type="nvarchar" MaxLength="50" />
           <Property Name="VALUE" Type="nvarchar" MaxLength="100" />
         </EntityType>
@@ -98,13 +98,13 @@
           </Key>
           <Property Name="PRODUCTPROPERTYID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="PRODUCTID" Type="Int32" />
-          <Property Name="PROPERTYID" Type="Int32" />
+          <Property Name="PROPERTYID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="PROPERTY">
           <Key>
             <PropertyRef Name="PROPERTYID" />
           </Key>
-          <Property Name="PROPERTYID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PROPERTYID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="KEY" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="VALUE" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>

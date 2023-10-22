@@ -1,21 +1,19 @@
-﻿using CafeMenuMvc.Entity.Dtos;
+﻿using CafeMenuMvc.Entity.Concrete;
+using CafeMenuMvc.Entity.Dtos;
 using CafeMenuMvc.Services.Abstract;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace CafeMenuMvc.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IProductService _productService;
 
-        public ProductController(IUserService userService)
+        public ProductController(IProductService productService)
         {
-            _userService = userService;
+            _productService = productService;
         }
 
 
@@ -25,9 +23,9 @@ namespace CafeMenuMvc.Controllers
             return View();
         }
 
-        public async Task<ActionResult> SignIn(UserLoginDto user)
+        public async Task<ActionResult> SignIn(MProduct productDto)
         {
-            var result = await _userService.SignIn(user);
+            var result = await _productService.Create(productDto);
             return Json(result);
         }
     }

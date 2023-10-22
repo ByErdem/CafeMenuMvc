@@ -16,6 +16,6 @@ namespace CafeMenuMvc.Data
     {
         public int PRODUCTPROPERTYID { get; set; }
         public Nullable<int> PRODUCTID { get; set; }
-        public Nullable<int> PROPERTYID { get; set; }
+        public string PROPERTYID { get; set; }
     }
 }
