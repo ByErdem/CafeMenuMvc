@@ -163,8 +163,11 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -17835,15 +17838,19 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Views\Dashboard\_PartialSidebar.cshtml" />
     <Content Include="Views\Login\RegisterPage.cshtml" />
     <Content Include="Views\Shared\_LoginLayout.cshtml" />
-    <Content Include="Views\Dashboard\_PartialMainHeader.cshtml" />
-    <Content Include="Views\Dashboard\_PartialMainContent.cshtml" />
-    <Content Include="Views\Dashboard\_PartialSidebarRight.cshtml" />
-    <Content Include="Views\Dashboard\_PartialFooterOpened.cshtml" />
-    <Content Include="Views\Dashboard\_PartialScripts.cshtml" />
-    <Content Include="Views\Dashboard\_PartialLoader.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Shared\_DashboardPublicFieldsLayout.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialFooterOpened.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialLoader.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialMainHeader.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialScripts.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialSidebar.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialSidebarRight.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Shared\DashboardPartials\_PartialWidgets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

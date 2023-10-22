@@ -7,6 +7,7 @@ namespace CafeMenuMvc.Entity.Dtos
     {
         public T Data { get; set; }
         public ResultStatus ResultStatus { get; set; }
+        public string SuccessMessage { get; set; }
         public string ErrorMessage { get; set; }
         public List<string> ErrorMessages { get; set; } // Birden fazla hata mesajı için
 
@@ -15,10 +16,11 @@ namespace CafeMenuMvc.Entity.Dtos
             
         }
 
-        public ResponseDto(T data, ResultStatus resultStatus = 0)
+        public ResponseDto(T data, ResultStatus resultStatus = 0, string successMessage="")
         {
             Data = data;
             ResultStatus = resultStatus;
+            SuccessMessage = successMessage;
         }
 
         public ResponseDto(string errorMessage)

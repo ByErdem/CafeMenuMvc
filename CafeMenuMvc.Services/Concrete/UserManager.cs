@@ -49,6 +49,7 @@ namespace CafeMenuMvc.Services.Concrete
 
             rsp.ResultStatus = ResultStatus.Success;
             rsp.Data = _mapper.Map<MUser>(newUser);
+            rsp.SuccessMessage = "Kullanıcı oluşturuldu";
 
             return rsp;
         }
@@ -60,13 +61,14 @@ namespace CafeMenuMvc.Services.Concrete
             var usr = await entity.USER.FirstOrDefaultAsync(x => x.USERNAME == userDto.Username);
             if (usr != null)
             {
-                    var encrypted = _encryptionService.AESEncrypt(userDto.Password + usr.SALTPASSWORD);
-                    var usrpass = await entity.USER.FirstOrDefaultAsync(x => x.USERNAME == userDto.Username && x.HASHPASSWORD == encrypted);
-                    if (usrpass != null)
-                    {
-                        rsp.ResultStatus = ResultStatus.Success;
-                        rsp.Data = _mapper.Map<MUser>(usr);
-                    }
+                var encrypted = _encryptionService.AESEncrypt(userDto.Password + usr.SALTPASSWORD);
+                var usrpass = await entity.USER.FirstOrDefaultAsync(x => x.USERNAME == userDto.Username && x.HASHPASSWORD == encrypted);
+                if (usrpass != null)
+                {
+                    rsp.ResultStatus = ResultStatus.Success;
+                    rsp.Data = _mapper.Map<MUser>(usr);
+                    rsp.SuccessMessage = "Giriş başarılı";
+                }
             }
             else
             {
