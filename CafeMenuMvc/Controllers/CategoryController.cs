@@ -14,9 +14,10 @@ namespace CafeMenuMvc.Controllers
             _categoryService = categoryService;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var list = await _categoryService.GetAll();
+            return View(list);
         }
 
         public async Task<ActionResult> Create(MCategory categoryDto)

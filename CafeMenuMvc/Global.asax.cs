@@ -27,6 +27,7 @@ namespace CafeMenuMvc
             builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<CategoryManager>().As<ICategoryService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductManager>().As<IProductService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<DashboardManager>().As<IDashboardService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductPropertyManager>().As<IProductPropertyService>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);

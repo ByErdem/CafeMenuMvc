@@ -34,4 +34,27 @@ $(document).ready(function () {
     var x = JSON.parse(window.localStorage.getItem("data")).Data;
     $(".userName").text(x.NAME + " " + x.SURNAME);
 
+    PrintCounts();
+
+
+    function PrintCounts() {
+
+        var ProductCount = $.find("#ProductCount");
+        var CategoryCount = $.find("#CategoryCount");
+        var UserCount = $.find("#UserCount");
+
+        if (ProductCount.length != 0) {
+            CallRequest("/Dashboard/GetCounts", null, function (rsp) {
+                $(ProductCount[0]).text(rsp.Data.ProductCount)
+                $(CategoryCount[0]).text(rsp.Data.CategoryCount)
+                $(UserCount[0]).text(rsp.Data.UserCount)
+            });
+        }
+    }
+
+    //Proje bittiğinde burası aktifleştirilecek
+    //setInterval(function () {
+    //    PrintCounts();
+    //}, 10000);
+
 });

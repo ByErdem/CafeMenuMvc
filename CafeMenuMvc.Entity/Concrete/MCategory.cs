@@ -1,5 +1,4 @@
 ﻿using CafeMenuMvc.Shared.Abstract;
-using System;
 
 namespace CafeMenuMvc.Entity.Concrete
 {

@@ -118,21 +118,58 @@ namespace CafeMenuMvc.Services.Concrete
             return rsp;
         }
 
-        public async Task<ResponseDto<List<MCategory>>> GetAll()
+
+        public async Task<ResponseDto<CategoryDto>> Get(CategoryDto dto)
         {
-            var rsp = new ResponseDto<List<MCategory>>();
+            var rsp = new ResponseDto<CategoryDto>();
+            CafeMenuEntities entity = new CafeMenuEntities();
+            var category = await entity.CATEGORY.FirstOrDefaultAsync(x => x.CATEGORYID == dto.CATEGORYID);
+            if (category != null)
+            {
+                rsp.Data = _mapper.Map<CategoryDto>(category);
+                rsp.ResultStatus= ResultStatus.Success;
+                rsp.SuccessMessage = "Kategori kaydı alındı";
+            }
+            else
+            {
+                rsp.ResultStatus = ResultStatus.Error;
+                rsp.ErrorMessage = "Böyle bir kayıt bulunamadı";
+            }
+
+            return rsp;
+        }
+
+
+        public async Task<ResponseDto<List<CategoryDto>>> GetAll()
+        {
+            var rsp = new ResponseDto<List<CategoryDto>>();
             CafeMenuEntities entity = new CafeMenuEntities();
 
             var categories = await entity.CATEGORY.ToListAsync();
 
             if (categories.Count > 0)
             {
-                rsp.Data = _mapper.Map<List<MCategory>>(categories);
+                rsp.Data = _mapper.Map<List<CategoryDto>>(categories);
+
+                for (int i = 0; i < rsp.Data.Count; i++)
+                {
+                    if (rsp.Data[i].PARENTCATEGORYID != 0)
+                    {
+                        var categoryDto = new CategoryDto {
+                            CATEGORYID = rsp.Data[i].PARENTCATEGORYID
+                        };
+
+                        var foundCategory = await Get(categoryDto);
+                        rsp.Data[i].PARENTCATEGORYNAME = foundCategory.Data.CATEGORYNAME;
+                    }
+                }
+
                 rsp.ResultStatus = ResultStatus.Success;
                 rsp.SuccessMessage = $"Toplamda {categories.Count} adet kategori listelendi";
             }
             else
             {
+                rsp.Data = new List<CategoryDto>();
                 rsp.ResultStatus = ResultStatus.Error;
                 rsp.ErrorMessage = "Sistemde tanımlı bir kategori yok.";
             }
