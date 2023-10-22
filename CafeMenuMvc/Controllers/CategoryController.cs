@@ -37,5 +37,23 @@ namespace CafeMenuMvc.Controllers
             return Json(result);
         }
 
+        public async Task<ActionResult> HardDelete(MCategory categoryDto)
+        {
+            var result = await _categoryService.HardDelete(categoryDto);
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetAll()
+        {
+            var result = await _categoryService.GetAll();
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetAllByParentID(MCategory categoryDto)
+        {
+            var result = await _categoryService.GetAllByParentID(categoryDto);
+            return Json(result);
+        }
+
     }
 }

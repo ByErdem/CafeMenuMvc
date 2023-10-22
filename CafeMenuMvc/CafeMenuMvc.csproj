@@ -17823,6 +17823,7 @@
     <Content Include="Scripts\Azira\assets\scss\util\_typography.scss" />
     <Content Include="Scripts\Azira\assets\scss\util\_width.scss" />
     <Content Include="Scripts\Azira\assets\scss\_variables.scss" />
+    <Content Include="Scripts\Views\Category\Category.js" />
     <Content Include="Scripts\Views\Dashboard\Dashboard.js" />
     <Content Include="Scripts\Views\Login\Login.js" />
     <Content Include="Scripts\Views\Product\Product.js" />

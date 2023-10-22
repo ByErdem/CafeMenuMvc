@@ -1,6 +1,5 @@
 ﻿
 $(document).ready(function () {
-    $("body").attr("class", "main-body bg-light login-img");
 
     $(document).on("click", ".btn", function (e) {
         e.preventDefault();

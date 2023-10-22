@@ -25,6 +25,7 @@ namespace CafeMenuMvc
             var builder = new ContainerBuilder();
             builder.RegisterType<EncryptionManager>().As<IEncryptionService>().AsSelf().SingleInstance();
             builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<CategoryManager>().As<ICategoryService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductManager>().As<IProductService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductPropertyManager>().As<IProductPropertyService>().AsSelf().InstancePerLifetimeScope();
 

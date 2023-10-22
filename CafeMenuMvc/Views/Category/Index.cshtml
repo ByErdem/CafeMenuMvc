@@ -2,3 +2,98 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_DashboardPublicFieldsLayout.cshtml";
 }
+
+
+<div class="row row-sm ">
+    <div class="col-md-12 col-xl-12">
+        <div class="card overflow-hidden review-project">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title mg-b-10">Categories</h4>
+                    <i class="mdi mdi-dots-horizontal text-gray"></i>
+                </div>
+
+                <button type="button" class="btn btn-success btnNewProduct" data-bs-target="#FrmNewCategory" data-bs-toggle="modal" data-bs-effect="effect-flip-horizontal">New Category</button>
+
+                <p class="tx-12 text-muted mb-3"></p>
+                <div class="table-responsive mb-0">
+                    <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Parent Category</th>
+                                <th>Process</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Alcohol</td>
+                                <td>Drink</td>
+                                <td>
+                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
+                                    <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal  fade" id="FrmNewCategory">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">New Category</h6><button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group">
+                        <label>Category Name</label> <input class="form-control txtCategoryName" placeholder="Enter category name" type="text">
+                    </div>
+                    <div class="form-group">
+                        <label>Parent Category</label>
+                        <select class="form-control select2">
+                            <option value="-1">
+                                Seçiniz
+                            </option>
+                            <option value="Firefox">
+                                Firefox
+                            </option>
+                            <option value="Chrome">
+                                Chrome
+                            </option>
+                            <option value="Safari">
+                                Safari
+                            </option>
+                            <option value="Opera">
+                                Opera
+                            </option>
+                            <option value="Internet Explorer">
+                                Internet Explorer
+                            </option>
+                        </select>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn ripple btn-primary" type="button">Save</button>
+                <button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="@Url.Content("~/Scripts/Azira/assets/js/modal.js")"></script>
+
+<!--- Select2 js --->
+<script src="@Url.Content("~/Scripts/Azira/assets/plugins/select2/js/select2.min.js")"></script>
+
+<!--- Category.js --->
+<script src="@Url.Content("~/Scripts/Views/Category/Category.js")"></script>
