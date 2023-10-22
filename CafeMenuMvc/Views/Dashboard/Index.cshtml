@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_DashboardLayout.cshtml";
+}
+
+<!-- Loader -->
+@Html.Partial("_PartialLoader")
+<!-- /Loader -->
+<!-- page -->
+<div class="page custom-index">
+    <!-- main-header -->
+    @Html.Partial("_PartialMainHeader")
+    <!-- /main-header -->
+    <!-- main-sidebar -->
+    @Html.Partial("_PartialSidebar")
+    <!-- main-sidebar -->
+    <!-- main-content -->
+    @Html.Partial("_PartialMainContent")
+    <!-- /main-content -->
+    <!--Sidebar-right-->
+    @Html.Partial("_PartialSidebarRight")
+    <!--/Sidebar-right-->
+    <!-- Footer opened -->
+    @Html.Partial("_PartialFooterOpened")
+    <!-- Footer closed -->
+</div>
+<!-- page closed -->
+<!--- Back-to-top --->
+<a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
+@Html.Partial("_PartialScripts")
