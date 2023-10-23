@@ -12,7 +12,7 @@ namespace CafeMenuMvc.Services.Abstract
     public interface ICategoryService
     {
         Task<ResponseDto<CategoryDto>> Create(CategoryDto categoryDto);
-        Task<ResponseDto<int>> Update(MCategory categoryDto);
+        Task<ResponseDto<CategoryDto>> Update(CategoryDto categoryDto);
         Task<ResponseDto<int>> Delete(MCategory categoryDto);
         Task<ResponseDto<int>> HardDelete(MCategory categoryDto);
         Task<ResponseDto<List<CategoryDto>>> GetAll();

@@ -35,19 +35,24 @@ namespace CafeMenuMvc.Services.Concrete
                 {
                     newCategory.PARENTCATEGORYID = null;
                 }
+                else
+                {
+                    newCategory.PARENTCATEGORYID = categoryDto.PARENTCATEGORYID;
+                }
 
                 newCategory.CREATORUSERID = 1;
                 newCategory.CREATEDDATE = DateTime.Now;
                 newCategory.ISDELETED = false;
+
 
                 entity.CATEGORY.Add(newCategory);
                 await entity.SaveChangesAsync();
 
                 var newCategoryDto = _mapper.Map<CategoryDto>(newCategory);
 
-                if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID!=0)
+                if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID != 0)
                 {
-                    newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(newCategoryDto.PARENTCATEGORYID);
+                    newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName((int)newCategory.PARENTCATEGORYID);
                 }
 
                 rsp.ResultStatus = ResultStatus.Success;
@@ -65,7 +70,7 @@ namespace CafeMenuMvc.Services.Concrete
 
                     if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID != 0)
                     {
-                        newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(newCategoryDto.PARENTCATEGORYID);
+                        newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(categoryDto.PARENTCATEGORYID);
                     }
 
                     rsp.ResultStatus = ResultStatus.Success;
@@ -83,20 +88,32 @@ namespace CafeMenuMvc.Services.Concrete
             return rsp;
         }
 
-        public async Task<ResponseDto<int>> Update(MCategory categoryDto)
+        public async Task<ResponseDto<CategoryDto>> Update(CategoryDto categoryDto)
         {
-            var rsp = new ResponseDto<int>();
+            var rsp = new ResponseDto<CategoryDto>();
             CafeMenuEntities entity = new CafeMenuEntities();
 
             var category = await entity.CATEGORY.FirstOrDefaultAsync(x => x.CATEGORYID == categoryDto.CATEGORYID);
             if (category != null)
             {
                 category.CATEGORYNAME = categoryDto.CATEGORYNAME;
+
+                if (categoryDto.PARENTCATEGORYID != -1 && categoryDto.PARENTCATEGORYID != 0)
+                {
+                    category.PARENTCATEGORYID = categoryDto.PARENTCATEGORYID;
+                    categoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(categoryDto.PARENTCATEGORYID);
+                }
+                else
+                {
+                    category.PARENTCATEGORYID = null;
+                    categoryDto.PARENTCATEGORYNAME = "";
+                }
+
                 await entity.SaveChangesAsync();
 
                 rsp.ResultStatus = ResultStatus.Success;
                 rsp.SuccessMessage = "Değişiklikler başarıyla kaydedildi.";
-                rsp.Data = 1;
+                rsp.Data = categoryDto;
             }
             else
             {
@@ -193,7 +210,7 @@ namespace CafeMenuMvc.Services.Concrete
             var rsp = new ResponseDto<List<CategoryDto>>();
             CafeMenuEntities entity = new CafeMenuEntities();
 
-            var categories = await entity.CATEGORY.Where(x=>x.ISDELETED==false).ToListAsync();
+            var categories = await entity.CATEGORY.Where(x => x.ISDELETED == false).ToListAsync();
 
             if (categories.Count > 0)
             {

@@ -1,5 +1,8 @@
 ﻿$(document).ready(function () {
 
+    var tableRow;
+    var rowData;
+
     function DeleteCategory(e) {
 
         var categoryid = $(e).attr("categoryid");
@@ -20,25 +23,33 @@
         searchInputPlaceholder: 'Search'
     });
 
-    $(document).on("click", ".btnSave", function (e) {
+    $(document).on("click", ".btnNewSave", function (e) {
         e.preventDefault();
-        console.log(e);
-        var formData = $('#frmCategory').serializeArray();
+        //console.log(e);
+        var formData = $('#frmNewCategoryFormData').serializeArray();
+
+        if (formData[0].value == "") {
+            swal("Alert", "You should enter the category name!", "error");
+            return;
+        }
 
         var data = {
             "CATEGORYNAME": formData[0].value,
             "PARENTCATEGORYID": formData[1].value,
         }
 
-        $("#FrmNewCategory").modal("hide");
+        //console.log(data);
+
+        $("#frmNewCategory").modal("hide");
 
         CallRequest("/Category/Create", data, function (rsp) {
 
             var PARENTCATEGORYNAME = rsp.Data.PARENTCATEGORYNAME ?? "";
             var CREATEDDATE = ParseDate(rsp.Data.CREATEDDATE);
             var CATEGORYID = rsp.Data.CATEGORYID;
+            var COUNT = $("#TblCategory tr").length;
 
-            var newRow = "<tr><td>" + rsp.Data.CATEGORYNAME + "</td><td>" + PARENTCATEGORYNAME + "</td><td>" + CREATEDDATE + "</td>";
+            var newRow = "<tr><td>" + COUNT + "</td><td>" + rsp.Data.CATEGORYNAME + "</td><td>" + PARENTCATEGORYNAME + "</td><td>" + CREATEDDATE + "</td>";
             newRow += '<td><button categoryid="' + CATEGORYID + '" type="button" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>&nbsp;'
             newRow += '<button categoryid="' + CATEGORYID + '" type="button" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button></td></tr>';
 
@@ -58,13 +69,84 @@
         });
     });
 
+    $(document).on("click", ".btnEditSave", function (e) {
+        e.preventDefault();
+
+        var formData = $('#frmEditCategoryFormData').serializeArray();
+
+        if (formData[0].value == "") {
+            swal("Alert", "You should enter the category name!", "error");
+            return;
+        }
+
+        if (formData[1] == undefined) {
+            $(".cmbEditCategory").val(-1).trigger("change");
+
+            formData.push({
+                "name": "cmbEditCategory",
+                "value": -1
+            });
+
+        }
+
+        var data = {
+            "CATEGORYID": rowData.CATEGORYID,
+            "CATEGORYNAME": formData[0].value,
+            "PARENTCATEGORYID": formData[1].value,
+        }
+
+        console.log(data);
+
+        CallRequest("/Category/Update", data, function (rsp) {
+            $(tableRow[1]).text(rsp.Data.CATEGORYNAME);
+            $(tableRow[2]).text(rsp.Data.PARENTCATEGORYNAME);
+            $("#frmEditCategory").modal("hide");
+            PrintCounts();
+        });
+    });
+
     $(document).on("click", ".btnUpdate", function (e) {
-        console.log("Update");
+        e.stopPropagation();
+        rowData = JSON.parse($(this).attr("data"));
+        //console.log(data);
+        $("#frmEditCategory").modal("show");
+
+        if (rowData.PARENTCATEGORYID == 0) {
+            rowData.PARENTCATEGORYID = -1;
+        }
+
+        FillSelect2(".cmbEditCategory", function () {
+            $(".txtEditCategoryName").val(rowData.CATEGORYNAME);
+            $(".cmbEditCategory").val(rowData.PARENTCATEGORYID).trigger("change");
+        });
+
+        tableRow = $(this).parent().parent().children();
     });
 
     $(document).on("click", ".btnDelete", function (e) {
         e.stopPropagation();
         DeleteCategory(this);
+    });
+
+    $(document).on("click", ".btnNewCategory", function (e) {
+        e.stopPropagation();
+        $("#frmNewCategory").modal("show");
+        FillSelect2(".cmbNewCategory");
+    });
+
+    $(document).on("keyup", ".txtCategorySearch", function () {
+
+        var value = $(this).val().toLowerCase();
+
+        if (!value) {
+            $("#TblCategory tr").show();
+            return;
+        }
+
+        $("#TblCategory tbody tr").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+
     });
 
 });

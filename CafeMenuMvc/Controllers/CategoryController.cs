@@ -27,7 +27,7 @@ namespace CafeMenuMvc.Controllers
             return Json(result);
         }
 
-        public async Task<ActionResult> Update(MCategory categoryDto)
+        public async Task<ActionResult> Update(CategoryDto categoryDto)
         {
             var result = await _categoryService.Update(categoryDto);
             return Json(result);

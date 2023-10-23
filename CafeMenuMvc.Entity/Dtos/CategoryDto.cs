@@ -9,7 +9,7 @@ namespace CafeMenuMvc.Entity.Dtos
 {
     public class CategoryDto : EntityBase
     {
-        public int CATEGORYID { get; set; } = 0;
+        public int CATEGORYID { get; set; }
         public string CATEGORYNAME { get; set; }
         public int PARENTCATEGORYID { get; set; }
         public string PARENTCATEGORYNAME { get; set; } 
