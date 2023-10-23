@@ -48,6 +48,7 @@
     <Compile Include="Concrete\MUser.cs" />
     <Compile Include="Dtos\CategoryDto.cs" />
     <Compile Include="Dtos\CountsDto.cs" />
+    <Compile Include="Dtos\NameValueDto.cs" />
     <Compile Include="Dtos\ProductPropertyDto.cs" />
     <Compile Include="Dtos\ResponseDto.cs" />
     <Compile Include="Dtos\UserLoginDto.cs" />

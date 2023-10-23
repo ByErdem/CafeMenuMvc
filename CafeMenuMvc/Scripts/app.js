@@ -10,7 +10,7 @@
                 event(rsp);
             },
             error: function (req, status, error) {
-                // do something with error
+
             }
         });
     }
@@ -23,11 +23,45 @@
                 event(rsp);
             },
             error: function (req, status, error) {
-                // do something with error
+
             }
         });
     }
 }
+
+function ParseDate(date) {
+    var timeStamp = date.match(/\d+/)[0];
+    var timeStampNumber = parseInt(timeStamp, 10);
+    var result = new Date(timeStampNumber);
+    return FormatDate(result);
+}
+
+function FormatDate(date) {
+    var day = date.getDate().toString().padStart(2, '0');
+    var month = (date.getMonth() + 1).toString().padStart(2, '0');
+    var year = date.getFullYear();
+    var hour = date.getHours().toString().padStart(2, '0');
+    var minute = date.getMinutes().toString().padStart(2, '0');
+    var seconds = date.getSeconds().toString().padStart(2, '0');
+
+    return `${day}.${month}.${year} ${hour}:${minute}:${seconds}`;
+}
+
+function PrintCounts() {
+
+    var ProductCount = $.find("#ProductCount");
+    var CategoryCount = $.find("#CategoryCount");
+    var UserCount = $.find("#UserCount");
+
+    if (ProductCount.length != 0) {
+        CallRequest("/Dashboard/GetCounts", null, function (rsp) {
+            $(ProductCount[0]).text(rsp.Data.ProductCount)
+            $(CategoryCount[0]).text(rsp.Data.CategoryCount)
+            $(UserCount[0]).text(rsp.Data.UserCount)
+        });
+    }
+}
+
 
 $(document).ready(function () {
 
@@ -35,22 +69,6 @@ $(document).ready(function () {
     $(".userName").text(x.NAME + " " + x.SURNAME);
 
     PrintCounts();
-
-
-    function PrintCounts() {
-
-        var ProductCount = $.find("#ProductCount");
-        var CategoryCount = $.find("#CategoryCount");
-        var UserCount = $.find("#UserCount");
-
-        if (ProductCount.length != 0) {
-            CallRequest("/Dashboard/GetCounts", null, function (rsp) {
-                $(ProductCount[0]).text(rsp.Data.ProductCount)
-                $(CategoryCount[0]).text(rsp.Data.CategoryCount)
-                $(UserCount[0]).text(rsp.Data.UserCount)
-            });
-        }
-    }
 
     //Proje bittiğinde burası aktifleştirilecek
     //setInterval(function () {

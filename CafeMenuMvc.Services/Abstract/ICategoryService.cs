@@ -1,4 +1,5 @@
-﻿using CafeMenuMvc.Entity.Concrete;
+﻿using CafeMenuMvc.Data;
+using CafeMenuMvc.Entity.Concrete;
 using CafeMenuMvc.Entity.Dtos;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace CafeMenuMvc.Services.Abstract
 {
     public interface ICategoryService
     {
-        Task<ResponseDto<int>> Create(MCategory categoryDto);
+        Task<ResponseDto<CategoryDto>> Create(CategoryDto categoryDto);
         Task<ResponseDto<int>> Update(MCategory categoryDto);
         Task<ResponseDto<int>> Delete(MCategory categoryDto);
         Task<ResponseDto<int>> HardDelete(MCategory categoryDto);

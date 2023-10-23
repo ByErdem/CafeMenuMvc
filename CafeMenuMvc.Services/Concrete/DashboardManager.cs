@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CafeMenuMvc.Services.Concrete
 {
-    public class DashboardManager:IDashboardService
+    public class DashboardManager : IDashboardService
     {
 
         public async Task<ResponseDto<CountsDto>> GetCounts()
@@ -19,8 +19,8 @@ namespace CafeMenuMvc.Services.Concrete
             CafeMenuEntities entity = new CafeMenuEntities();
 
             var users = await entity.USER.ToListAsync();
-            var categories = await entity.CATEGORY.ToListAsync();
-            var products = await entity.PRODUCT.ToListAsync();
+            var categories = await entity.CATEGORY.Where(x => x.ISDELETED == false).ToListAsync();
+            var products = await entity.PRODUCT.Where(x => x.ISDELETED == false).ToListAsync();
 
             rsp.Data = new CountsDto();
             rsp.Data.UserCount = users.Count;

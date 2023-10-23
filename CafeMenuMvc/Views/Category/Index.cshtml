@@ -3,6 +3,8 @@
     Layout = "~/Views/Shared/_DashboardPublicFieldsLayout.cshtml";
 }
 
+@model ResponseDto<List<CategoryDto>>
+
 <div class="row row-sm ">
     <div class="col-md-12 col-xl-12">
         <div class="card overflow-hidden review-project">
@@ -17,13 +19,12 @@
                 <p class="tx-12 text-muted mb-3"></p>
                 <div class="table-responsive mb-0">
 
-                    @model ResponseDto<List<CategoryDto>>
-
-                    <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
+                    <table id="TblCategory" class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
                         <thead>
                             <tr>
                                 <th>Category Name</th>
                                 <th>Parent Category</th>
+                                <th>Created Date</th>
                                 <th>Process</th>
                             </tr>
                         </thead>
@@ -35,9 +36,10 @@
                                     <tr>
                                         <td>@item.CATEGORYNAME</td>
                                         <td>@(item.PARENTCATEGORYNAME ?? "")</td>
+                                        <td>@item.CREATEDDATE</td>
                                         <td>
-                                            <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
-                                            <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
+                                            <button categoryid="@item.CATEGORYID" type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
+                                            <button categoryid="@item.CATEGORYID" type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
                                         </td>
                                     </tr>
                                 }
@@ -45,7 +47,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="3" style="text-align:center; vertical-align:middle;">Kayıt Yok</td>
+                                    <td id="NoData" colspan="4" style="text-align:center; vertical-align:middle;">Kayıt Yok</td>
                                 </tr>
                             }
 
@@ -57,7 +59,6 @@
     </div>
 </div>
 
-
 <div class="modal  fade" id="FrmNewCategory">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content modal-content-demo">
@@ -66,38 +67,32 @@
             </div>
             <div class="modal-body">
 
-                <form>
+                <form id="frmCategory">
                     <div class="form-group">
-                        <label>Category Name</label> <input class="form-control txtCategoryName" placeholder="Enter category name" type="text">
+                        <label>Category Name</label> <input class="form-control txtCategoryName" name="txtCategoryName" placeholder="Enter category name" type="text">
                     </div>
                     <div class="form-group">
                         <label>Parent Category</label>
-                        <select class="form-control select2">
+                        <select class="form-control select2 cmbParentCategory" name="cmbParentCategory">
                             <option value="-1">
                                 Seçiniz
                             </option>
-                            <option value="Firefox">
-                                Firefox
-                            </option>
-                            <option value="Chrome">
-                                Chrome
-                            </option>
-                            <option value="Safari">
-                                Safari
-                            </option>
-                            <option value="Opera">
-                                Opera
-                            </option>
-                            <option value="Internet Explorer">
-                                Internet Explorer
-                            </option>
+                            @if (Model.Data.Count > 0)
+                            {
+                                foreach (var item in Model.Data)
+                                {
+                                    <option value="@item.CATEGORYID">
+                                        @item.CATEGORYNAME
+                                    </option>
+                                }
+                            }
                         </select>
                     </div>
                 </form>
 
             </div>
             <div class="modal-footer">
-                <button class="btn ripple btn-primary" type="button">Save</button>
+                <button class="btn ripple btn-primary btnSave" type="submit">Save</button>
                 <button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
             </div>
         </div>

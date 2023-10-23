@@ -4,9 +4,11 @@ using CafeMenuMvc.Entity.Concrete;
 using CafeMenuMvc.Entity.Dtos;
 using CafeMenuMvc.Models.ComplexTypes;
 using CafeMenuMvc.Services.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace CafeMenuMvc.Services.Concrete
@@ -20,27 +22,62 @@ namespace CafeMenuMvc.Services.Concrete
             _mapper = mapper;
         }
 
-        public async Task<ResponseDto<int>> Create(MCategory categoryDto)
+        public async Task<ResponseDto<CategoryDto>> Create(CategoryDto categoryDto)
         {
-            var rsp = new ResponseDto<int>();
+            var rsp = new ResponseDto<CategoryDto>();
             CafeMenuEntities entity = new CafeMenuEntities();
 
             var category = await entity.CATEGORY.FirstOrDefaultAsync(x => x.CATEGORYNAME == categoryDto.CATEGORYNAME);
             if (category == null)
             {
                 var newCategory = _mapper.Map<CATEGORY>(categoryDto);
+                if (categoryDto.PARENTCATEGORYID == -1)
+                {
+                    newCategory.PARENTCATEGORYID = null;
+                }
+
+                newCategory.CREATORUSERID = 1;
+                newCategory.CREATEDDATE = DateTime.Now;
+                newCategory.ISDELETED = false;
+
                 entity.CATEGORY.Add(newCategory);
                 await entity.SaveChangesAsync();
 
+                var newCategoryDto = _mapper.Map<CategoryDto>(newCategory);
+
+                if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID!=0)
+                {
+                    newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(newCategoryDto.PARENTCATEGORYID);
+                }
+
                 rsp.ResultStatus = ResultStatus.Success;
                 rsp.SuccessMessage = "Kategori başarıyla eklendi.";
-                rsp.Data = 1;
+                rsp.Data = newCategoryDto;
             }
             else
             {
-                rsp.ErrorMessage = $"{categoryDto.CATEGORYNAME} isimli kategori sistemde tanımlıdır.";
-                rsp.ResultStatus = ResultStatus.Error;
-                rsp.Data = 0;
+                if (category.ISDELETED.Value)
+                {
+                    category.ISDELETED = false;
+                    await entity.SaveChangesAsync();
+
+                    var newCategoryDto = _mapper.Map<CategoryDto>(category);
+
+                    if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID != 0)
+                    {
+                        newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(newCategoryDto.PARENTCATEGORYID);
+                    }
+
+                    rsp.ResultStatus = ResultStatus.Success;
+                    rsp.SuccessMessage = "Kategori başarıyla eklendi.";
+                    rsp.Data = newCategoryDto;
+                }
+                else
+                {
+                    rsp.ErrorMessage = $"{categoryDto.CATEGORYNAME} isimli kategori sistemde tanımlıdır.";
+                    rsp.ResultStatus = ResultStatus.Error;
+                    rsp.Data = _mapper.Map<CategoryDto>(category);
+                }
             }
 
             return rsp;
@@ -82,7 +119,7 @@ namespace CafeMenuMvc.Services.Concrete
                 await entity.SaveChangesAsync();
 
                 rsp.ResultStatus = ResultStatus.Success;
-                rsp.SuccessMessage = $"{categoryDto.CATEGORYNAME} isimli kategori başarıyla silindi.";
+                rsp.SuccessMessage = $"{category.CATEGORYNAME} isimli kategori başarıyla silindi.";
                 rsp.Data = 1;
             }
             else
@@ -127,7 +164,7 @@ namespace CafeMenuMvc.Services.Concrete
             if (category != null)
             {
                 rsp.Data = _mapper.Map<CategoryDto>(category);
-                rsp.ResultStatus= ResultStatus.Success;
+                rsp.ResultStatus = ResultStatus.Success;
                 rsp.SuccessMessage = "Kategori kaydı alındı";
             }
             else
@@ -139,13 +176,24 @@ namespace CafeMenuMvc.Services.Concrete
             return rsp;
         }
 
+        public async Task<string> FindParentCategoryName(int CATEGORYID)
+        {
+            var categoryDto = new CategoryDto
+            {
+                CATEGORYID = CATEGORYID
+            };
+
+            var category = await Get(categoryDto);
+            return category.Data.CATEGORYNAME;
+        }
+
 
         public async Task<ResponseDto<List<CategoryDto>>> GetAll()
         {
             var rsp = new ResponseDto<List<CategoryDto>>();
             CafeMenuEntities entity = new CafeMenuEntities();
 
-            var categories = await entity.CATEGORY.ToListAsync();
+            var categories = await entity.CATEGORY.Where(x=>x.ISDELETED==false).ToListAsync();
 
             if (categories.Count > 0)
             {
@@ -155,12 +203,7 @@ namespace CafeMenuMvc.Services.Concrete
                 {
                     if (rsp.Data[i].PARENTCATEGORYID != 0)
                     {
-                        var categoryDto = new CategoryDto {
-                            CATEGORYID = rsp.Data[i].PARENTCATEGORYID
-                        };
-
-                        var foundCategory = await Get(categoryDto);
-                        rsp.Data[i].PARENTCATEGORYNAME = foundCategory.Data.CATEGORYNAME;
+                        rsp.Data[i].PARENTCATEGORYNAME = await FindParentCategoryName(rsp.Data[i].PARENTCATEGORYID);
                     }
                 }
 

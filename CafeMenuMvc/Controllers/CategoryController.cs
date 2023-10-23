@@ -1,4 +1,5 @@
 ﻿using CafeMenuMvc.Entity.Concrete;
+using CafeMenuMvc.Entity.Dtos;
 using CafeMenuMvc.Services.Abstract;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace CafeMenuMvc.Controllers
             return View(list);
         }
 
-        public async Task<ActionResult> Create(MCategory categoryDto)
+        public async Task<ActionResult> Create(CategoryDto categoryDto)
         {
             var result = await _categoryService.Create(categoryDto);
             return Json(result);
