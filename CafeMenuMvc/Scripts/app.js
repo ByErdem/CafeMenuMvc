@@ -597,5 +597,9 @@ $(function () {
     var x = JSON.parse(window.localStorage.getItem("data")).Data;
     $(".userName").text(x.NAME + " " + x.SURNAME);
 
-    PrintCounts();
+    //Proje bittiğinde burası aktifleştirilecek
+    setInterval(function () {
+        PrintCounts();
+    }, 10000);
+
 });
