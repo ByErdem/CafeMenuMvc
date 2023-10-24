@@ -51,6 +51,18 @@ namespace CafeMenuMvc.Controllers
             return Json(result);
         }
 
+        public async Task<ActionResult> GetMainCategories()
+        {
+            var result = await _categoryService.GetMainCategories();
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetSubCategories(int categoryId)
+        {
+            var result = await _categoryService.GetSubCategories(categoryId);
+            return Json(result);
+        }
+
         public async Task<ActionResult> GetAllByParentID(MCategory categoryDto)
         {
             var result = await _categoryService.GetAllByParentID(categoryDto);

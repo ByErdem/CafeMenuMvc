@@ -3,6 +3,8 @@
     Layout = "~/Views/Shared/_DashboardPublicFieldsLayout.cshtml";
 }
 
+@model  ResponseDto<List<ProductDto>>
+
 <div class="row row-sm ">
     <div class="col-md-12 col-xl-12">
         <div class="card overflow-hidden review-project">
@@ -12,13 +14,14 @@
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
 
-                <button type="button" class="btn btn-success btnNewProduct" data-bs-target="#FrmNewProduct" data-bs-toggle="modal">New Product</button>
+                <button type="submit" class="btn btn-success btnNewProduct">New Product</button>
 
                 <p class="tx-12 text-muted mb-3"></p>
                 <div class="table-responsive mb-0">
-                    <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
+                    <table id="tblProduct" class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
                         <thead>
                             <tr>
+                                <th>Queue</th>
                                 <th>Image</th>
                                 <th>Product Name</th>
                                 <th>Category</th>
@@ -28,22 +31,42 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <div class="avatar avatar-sm d-none d-sm-flex bg-teal rounded-circle">
-                                        PR
-                                    </div>
-                                </td>
-                                <td>
-                                </td>
-                                <td>Web Design</td>
-                                <td>1200 TL</td>
-                                <td>15 March 2020</td>
-                                <td>
-                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
-                                    <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
-                                </td>
-                            </tr>
+
+                            @if (Model.Data.Count > 0)
+                            {
+                                int index = 0;
+                                foreach (var item in Model.Data)
+                                {
+
+                                    <tr>
+                                        <td>@(index+1)</td>
+                                        <td>
+                                            <div class="avatar avatar-sm d-none d-sm-flex bg-teal rounded-circle">
+                                                <img src="@Url.Content("~/Images/" + item.IMAGEPATH + "?t=" + Guid.NewGuid().ToString())" />
+                                            </div>
+                                        </td>
+                                        <td>
+                                            @item.PRODUCTNAME
+                                        </td>
+                                        <td>@item.CATEGORYNAME</td>
+                                        <td>@item.PRICE</td>
+                                        <td>@item.CREATEDDATE</td>
+                                        <td>
+                                            @*<button productid="@item.PRODUCTID" type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>*@
+                                            <button productid="@item.PRODUCTID" categoryid="@item.CATEGORYID" type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
+                                        </td>
+                                    </tr>
+                                    index++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td id="NoData1" colspan="7" style="text-align:center; vertical-align:middle;">Kayıt Yok</td>
+                                </tr>
+                            }
+
+
                         </tbody>
                     </table>
                 </div>
@@ -52,7 +75,7 @@
     </div>
 </div>
 
-<div class="row row-sm ">
+<div class="row row-sm pnlProductProperty" style="display:none;">
     <div class="col-md-12 col-xl-12">
         <div class="card overflow-hidden review-project">
             <div class="card-body">
@@ -65,7 +88,7 @@
 
                 <p class="tx-12 text-muted mb-3"></p>
                 <div class="table-responsive mb-0">
-                    <table class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
+                    <table id="tblProductProperty" class="table table-hover table-bordered mb-0 text-md-nowrap text-lg-nowrap text-xl-nowrap table-striped ">
                         <thead>
                             <tr>
                                 <th>Key</th>
@@ -74,15 +97,18 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @*<tr>
+                                    <td>
+                                        Tatlı
+                                    </td>
+                                    <td>İrmik Helvası</td>
+                                    <td>
+                                        <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
+                                        <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>*@
                             <tr>
-                                <td>
-                                    Tatlı
-                                </td>
-                                <td>İrmik Helvası</td>
-                                <td>
-                                    <button type="submit" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>
-                                    <button type="submit" class="btn btn-danger btnDelete" style="color:white;"><i class="far fa-trash-alt"></i></button>
-                                </td>
+                                <td id="NoData2" colspan="3" style="text-align:center; vertical-align:middle;">Kayıt Yok</td>
                             </tr>
                         </tbody>
                     </table>
@@ -93,7 +119,7 @@
 </div>
 
 
-<div class="modal" id="FrmNewProduct">
+<div class="modal effect-flip-horizontal" id="frmNewProduct">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
@@ -101,44 +127,38 @@
             </div>
             <div class="modal-body">
 
-                <form>
+                <form id="frmNewProductFormData">
                     <div class="form-group">
-                        <label>Product Name</label> <input class="form-control txtName" placeholder="Enter product name" type="text">
+                        <label>Product Name</label> <input class="form-control txtProductName" name="txtProductName" placeholder="Enter product name" type="text">
                     </div>
                     <div class="form-group">
-                        <label>Category</label>
-                        <select class="form-control select2">
-                            <option label="Choose one">
-                            </option>
-                            <option value="Firefox">
-                                Firefox
-                            </option>
-                            <option value="Chrome">
-                                Chrome
-                            </option>
-                            <option value="Safari">
-                                Safari
-                            </option>
-                            <option value="Opera">
-                                Opera
-                            </option>
-                            <option value="Internet Explorer">
-                                Internet Explorer
+                        <label>Main Category</label>
+                        <select class="form-control select2 cmbMainCategory" name="cmbMainCategory" style="width:100%;">
+                            <option label="Seçiniz">
+                                Seçiniz
                             </option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Price</label> <input class="form-control txtPrice" placeholder="Enter the price" type="text">
+                        <label>Sub Category</label>
+                        <select class="form-control select2 cmbSubCategory" name="cmbSubCategory" style="width:100%;">
+                            <option label="Seçiniz">
+                                Seçiniz
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Price</label> <input class="form-control txtPrice" name="txtPrice" placeholder="Enter the price" type="text">
                     </div>
                     <div class="form-group">
                         <label>Photo</label>
-                        <input type="file" class="dropify" data-height="200" />
+                        <input type="file" class="dropify" name="fileNewProductImage" data-height="200" />
                     </div>
                 </form>
 
             </div>
             <div class="modal-footer">
-                <button class="btn ripple btn-primary" type="button">Save</button>
+                <button class="btn ripple btn-primary btnProductSave" type="button">Save</button>
                 <button class="btn ripple btn-secondary" data-bs-dismiss="modal" type="button">Close</button>
             </div>
         </div>

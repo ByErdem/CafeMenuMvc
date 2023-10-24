@@ -63,15 +63,18 @@ namespace CafeMenuMvc.Services.Concrete
             {
                 if (category.ISDELETED.Value)
                 {
-                    category.ISDELETED = false;
-                    await entity.SaveChangesAsync();
-
                     var newCategoryDto = _mapper.Map<CategoryDto>(category);
 
-                    if (newCategoryDto.PARENTCATEGORYID != -1 && newCategoryDto.PARENTCATEGORYID != 0)
+                    category.ISDELETED = false;
+
+                    if (categoryDto.PARENTCATEGORYID > 0)
                     {
+                        category.PARENTCATEGORYID = categoryDto.PARENTCATEGORYID;
+                        newCategoryDto.PARENTCATEGORYID = categoryDto.PARENTCATEGORYID;
                         newCategoryDto.PARENTCATEGORYNAME = await FindParentCategoryName(categoryDto.PARENTCATEGORYID);
                     }
+
+                    await entity.SaveChangesAsync();
 
                     rsp.ResultStatus = ResultStatus.Success;
                     rsp.SuccessMessage = "Kategori başarıyla eklendi.";
@@ -204,6 +207,69 @@ namespace CafeMenuMvc.Services.Concrete
             return category.Data.CATEGORYNAME;
         }
 
+        public async Task<ResponseDto<List<CategoryDto>>> GetMainCategories()
+        {
+            var rsp = new ResponseDto<List<CategoryDto>>();
+            CafeMenuEntities entity = new CafeMenuEntities();
+
+            var categories = await entity.CATEGORY.Where(x => x.ISDELETED == false && x.PARENTCATEGORYID == null).ToListAsync();
+
+            if (categories.Count > 0)
+            {
+                rsp.Data = _mapper.Map<List<CategoryDto>>(categories);
+
+                for (int i = 0; i < rsp.Data.Count; i++)
+                {
+                    if (rsp.Data[i].PARENTCATEGORYID > 0)
+                    {
+                        rsp.Data[i].PARENTCATEGORYNAME = await FindParentCategoryName(rsp.Data[i].PARENTCATEGORYID);
+                    }
+                }
+
+                rsp.ResultStatus = ResultStatus.Success;
+                rsp.SuccessMessage = $"Toplamda {categories.Count} adet kategori listelendi";
+            }
+            else
+            {
+                rsp.Data = new List<CategoryDto>();
+                rsp.ResultStatus = ResultStatus.Error;
+                rsp.ErrorMessage = "Sistemde tanımlı bir kategori yok.";
+            }
+
+            return rsp;
+        }
+
+        public async Task<ResponseDto<List<CategoryDto>>> GetSubCategories(int CategoryId)
+        {
+            var rsp = new ResponseDto<List<CategoryDto>>();
+            CafeMenuEntities entity = new CafeMenuEntities();
+
+            var categories = await entity.CATEGORY.Where(x => x.ISDELETED == false && x.PARENTCATEGORYID != null && x.PARENTCATEGORYID==CategoryId).ToListAsync();
+
+            if (categories.Count > 0)
+            {
+                rsp.Data = _mapper.Map<List<CategoryDto>>(categories);
+
+                for (int i = 0; i < rsp.Data.Count; i++)
+                {
+                    if (rsp.Data[i].PARENTCATEGORYID > 0)
+                    {
+                        rsp.Data[i].PARENTCATEGORYNAME = await FindParentCategoryName(rsp.Data[i].PARENTCATEGORYID);
+                    }
+                }
+
+                rsp.ResultStatus = ResultStatus.Success;
+                rsp.SuccessMessage = $"Toplamda {categories.Count} adet kategori listelendi";
+            }
+            else
+            {
+                rsp.Data = new List<CategoryDto>();
+                rsp.ResultStatus = ResultStatus.Error;
+                rsp.ErrorMessage = "Sistemde tanımlı bir kategori yok.";
+            }
+
+            return rsp;
+        }
 
         public async Task<ResponseDto<List<CategoryDto>>> GetAll()
         {
@@ -218,7 +284,7 @@ namespace CafeMenuMvc.Services.Concrete
 
                 for (int i = 0; i < rsp.Data.Count; i++)
                 {
-                    if (rsp.Data[i].PARENTCATEGORYID != 0)
+                    if (rsp.Data[i].PARENTCATEGORYID > 0)
                     {
                         rsp.Data[i].PARENTCATEGORYNAME = await FindParentCategoryName(rsp.Data[i].PARENTCATEGORYID);
                     }

@@ -13,8 +13,8 @@ namespace CafeMenuMvc.Models.Profiles
             CreateMap<USER, MUser>().ReverseMap();
             CreateMap<MUser, USER>().ReverseMap();
 
-            CreateMap<PRODUCT, MProduct>().ReverseMap();
-            CreateMap<MProduct, PRODUCT>().ReverseMap();
+            CreateMap<PRODUCT, ProductDto>().ReverseMap();
+            CreateMap<ProductDto, PRODUCT>().ReverseMap();
 
             CreateMap<CATEGORY,MCategory>().ReverseMap();
             CreateMap<MCategory, CATEGORY>().ReverseMap();

@@ -16,6 +16,9 @@ namespace CafeMenuMvc.Services.Abstract
         Task<ResponseDto<int>> Delete(MCategory categoryDto);
         Task<ResponseDto<int>> HardDelete(MCategory categoryDto);
         Task<ResponseDto<List<CategoryDto>>> GetAll();
+        Task<ResponseDto<List<CategoryDto>>> GetMainCategories();
+        Task<ResponseDto<List<CategoryDto>>> GetSubCategories(int CategoryId);
+        Task<string> FindParentCategoryName(int CATEGORYID);
         Task<ResponseDto<List<MCategory>>> GetAllByParentID(MCategory categoryDto);
     }
 }

@@ -44,6 +44,10 @@
     <!--- App.js --->
     <script src="@Url.Content("~/Scripts/app.js")"></script>
 
+    <script type="text/javascript">
+        window.baseUrl = "@Url.Content("~/")";
+    </script>
+
 </head>
 <body class="main-body app sidebar-mini ltr">
     @RenderBody()

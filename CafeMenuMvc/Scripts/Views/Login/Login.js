@@ -1,6 +1,5 @@
 ﻿
-$(document).ready(function () {
-
+$(function () {
     $(document).on("click", ".btn", function (e) {
         e.preventDefault();
 
@@ -19,5 +18,4 @@ $(document).ready(function () {
         });
 
     });
-
 });

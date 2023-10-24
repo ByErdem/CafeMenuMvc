@@ -3,6 +3,7 @@ using CafeMenuMvc.Entity.Dtos;
 using CafeMenuMvc.Services.Abstract;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CafeMenuMvc.Controllers
@@ -16,28 +17,34 @@ namespace CafeMenuMvc.Controllers
             _productService = productService;
         }
 
-
-        // GET: Product
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var list = await _productService.GetAll();
+            return View(list);
         }
 
-        public async Task<ActionResult> Create(MProduct productDto)
+        public async Task<ActionResult> Create(ProductDto productDto)
         {
-            var result = await _productService.Create(productDto);
+            HttpContext currentContext = System.Web.HttpContext.Current;
+            var result = await _productService.Create(productDto, currentContext);
             return Json(result);
         }
 
-        public async Task<ActionResult> Update(MProduct productDto)
+        public async Task<ActionResult> Update(ProductDto productDto)
         {
             var result = await _productService.Update(productDto);
             return Json(result);
         }
 
-        public async Task<ActionResult> Delete(MProduct productDto)
+        public async Task<ActionResult> Delete(ProductDto productDto)
         {
             var result = await _productService.Delete(productDto);
+            return Json(result);
+        }
+
+        public async Task<ActionResult> GetAll()
+        {
+            var result = await _productService.GetAll();
             return Json(result);
         }
     }

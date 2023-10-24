@@ -1,8 +1,5 @@
 ﻿
-
-$(document).ready(function () {
-    $("body").attr("class", "main-body login-img");
-
+$(function () {
     $(document).on("click", ".btn", function (e) {
         e.preventDefault();
 
@@ -20,5 +17,4 @@ $(document).ready(function () {
         });
 
     });
-
 });

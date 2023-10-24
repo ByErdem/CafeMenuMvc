@@ -6,14 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace CafeMenuMvc.Services.Abstract
 {
     public interface IProductService
     {
-        Task<ResponseDto<PRODUCT>> Create(MProduct productDto);
-        Task<ResponseDto<PRODUCT>> Update(MProduct productDto);
-        Task<ResponseDto<int>> Delete(MProduct productDto);
-        Task<ResponseDto<int>> HardDelete(MProduct productDto);
+        Task<ResponseDto<ProductDto>> Create(ProductDto productDto, HttpContext context);
+        Task<ResponseDto<PRODUCT>> Update(ProductDto productDto);
+        Task<ResponseDto<int>> Delete(ProductDto productDto);
+        Task<ResponseDto<int>> HardDelete(ProductDto productDto);
+        Task<ResponseDto<List<ProductDto>>> GetAll();
     }
 }

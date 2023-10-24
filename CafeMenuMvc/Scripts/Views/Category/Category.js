@@ -1,5 +1,5 @@
-﻿$(document).ready(function () {
-
+﻿
+$(function () {
     var tableRow;
     var rowData;
 
@@ -38,16 +38,14 @@
             "PARENTCATEGORYID": formData[1].value,
         }
 
-        //console.log(data);
-
-        $("#frmNewCategory").modal("hide");
-
         CallRequest("/Category/Create", data, function (rsp) {
+
+            $("#frmNewCategory").modal("hide");
 
             var PARENTCATEGORYNAME = rsp.Data.PARENTCATEGORYNAME ?? "";
             var CREATEDDATE = ParseDate(rsp.Data.CREATEDDATE);
             var CATEGORYID = rsp.Data.CATEGORYID;
-            var COUNT = $("#TblCategory tr").length;
+            var COUNT = $("#tblCategory tr").length;
 
             var newRow = "<tr><td>" + COUNT + "</td><td>" + rsp.Data.CATEGORYNAME + "</td><td>" + PARENTCATEGORYNAME + "</td><td>" + CREATEDDATE + "</td>";
             newRow += '<td><button categoryid="' + CATEGORYID + '" type="button" class="btn btn-danger btnUpdate" style="color:white;"><i class="fa fa-edit"></i></button>&nbsp;'
@@ -58,7 +56,7 @@
                 $(NoData[0]).remove();
             }
 
-            $('#TblCategory > tbody:last-child').append(newRow);
+            $('#tblCategory > tbody:last-child').append(newRow);
 
             $(document).on("click", ".btnDelete" + CATEGORYID, function (e) {
                 DeleteCategory(e);
@@ -139,14 +137,14 @@
         var value = $(this).val().toLowerCase();
 
         if (!value) {
-            $("#TblCategory tr").show();
+            $("#tblCategory tr").show();
             return;
         }
 
-        $("#TblCategory tbody tr").filter(function () {
+        $("#tblCategory tbody tr").filter(function () {
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
         });
 
     });
-
 });
+

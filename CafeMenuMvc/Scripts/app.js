@@ -30,6 +30,14 @@ function CallRequest(link, data, event) {
     }
 }
 
+function UUIDV4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0,
+            v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
 function ParseDate(date) {
     var timeStamp = date.match(/\d+/)[0];
     var timeStampNumber = parseInt(timeStamp, 10);
@@ -236,17 +244,358 @@ function FillSelect2(id, event) {
     });
 }
 
+function FillSelect2WithMainCategories(id, event, selectedEvent) {
 
-$(document).ready(function () {
+    CallRequest("/Category/GetMainCategories", null, function (rsp) {
 
+        let _selectIsOpen = false;
+        // const selectedAmount = {};
+        const MATCH_AT_START_OF_WORD = false;
+
+        if (rsp.ResultStatus == 0) {
+
+            var $selectElement = $(id);
+
+            // Select2'nin bulunduğu konumu al (ebeveyn elementi)
+            var $container = $selectElement.parent();
+
+            // Select2'yi yok et
+            $selectElement.select2('destroy');
+
+            // Select2 tarafından oluşturulan görsel arayüzü kaldır
+            $selectElement.next('.select2-container').remove();
+
+            // Önceki Select2 elementini DOM'dan kaldır
+            $selectElement.remove();
+
+            // Yeni bir <select> elementi oluştur
+            var $newSelect = $("<select></select>").addClass("form-control").addClass(id.replace(".", ""));
+            $newSelect.attr("name", id.replace(".", ""));
+
+            // Yeni <select> elementini eski elementin bulunduğu yere ekle
+            $container.append($newSelect);
+
+            // Yeni veri seti
+            var newData = [
+                {
+                    "id": "-1",
+                    "text": "Seçiniz"
+                }
+            ];
+
+            rsp.Data.forEach(function (item, index) {
+                newData.push({
+                    "id": item.CATEGORYID,
+                    "text": item.CATEGORYNAME
+                });
+            });
+
+            $newSelect.addClass(id);
+
+            $newSelect.on('select2:open', function (e) {
+                // Biraz gecikme ekleyerek, Select2'nin arama kutusunu DOM'a ekleme sürecini tamamlamasını bekleyin
+                setTimeout(function () {
+                    // Select2'nin arama kutusuna odaklan
+                    $('.select2-search__field').focus();
+                }, 0); // Gecikmeyi 0 olarak ayarlamak, bu işlemin "sonraki döngüde" gerçekleşmesini sağlar
+            });
+
+            const matchTextAndExtras = (params, item) => {
+                // `params.term` is the search term the user entered.
+                // `item.text` is the text that is displayed for the item object.
+                // `items.extras` is an optional array of extra values that should be matched if not match is found in `item.text`.
+                // console.debug("matchCustom(): params: %o; item %o", params, item);
+                let query = $.trim(params.term);
+                // If there is no search term, return all of the data.
+                if (!query || query.length < 2) {
+                    $("body").addClass("noTerm");
+                    // return null;
+                    return item;
+                } else {
+                    $("body").removeClass("noTerm");
+                }
+                // Do not display the item if there is no 'text' property (or if it's empty).
+                if (!$.trim(item.text)) {
+                    return null;
+                }
+                query = query.replace(/([^0-9A-Z -])/gi, "\\$1");
+                if (MATCH_AT_START_OF_WORD) {
+                    query = "\\b" + query;
+                }
+                // Try to match the search term, first in `item.text` and then in `item.extras`.
+                const queryRe = new RegExp(query, "ig");
+                if (item.text.search(queryRe) > -1) {
+                    const modifiedItem = $.extend({}, item, true);
+                    // Surround all matches of the query term with <span> elements.
+                    modifiedItem.text = item.text.replace(queryRe, match => {
+                        return "<mark>" + match + "</mark>";
+                    });
+                    return modifiedItem;
+                } else if (item.extras) {
+                    const matchedExtra = item.extras.find(text => {
+                        return text.search(queryRe) > -1;
+                    });
+                    if (matchedExtra) {
+                        const modifiedItem = $.extend({}, item, true);
+                        modifiedItem.text +=
+                            " <i>[" +
+                            matchedExtra.replace(queryRe, match => {
+                                return "<mark>" + match + "</mark>";
+                            }) +
+                            "]</i>";
+                        return modifiedItem;
+                    }
+                }
+                return null;
+            };
+
+            const renderItem = item => {
+                // console.log("renderItem(): item: %o", item);
+                if (item.text !== "") {
+                    return $("<div>").html(item.text);
+                } else {
+                    return "";
+                }
+            };
+
+            $newSelect.select2({
+                data: newData,
+                matcher: matchTextAndExtras,
+                dropdownParent: $container,
+                minimumInputLength: 0, // Don't use this: it prevents the dropdown from displaying any items until the user enters a query. Instead, matchCustom() contains logic to implement the same behavior.
+                selectOnClose: true,
+                //sorter: items => {
+                //    return items.reverse();
+                //},
+                templateResult: renderItem
+            });
+
+            $newSelect
+                .on("select2:open", event => {
+                    // console.debug("open: ", event);
+                    _selectIsOpen = true;
+                })
+                .on("select2:close", event => {
+                    // console.debug("close: ", event);
+                    _selectIsOpen = false;
+                })
+                // .on("select2:selecting", (event) => {
+                //   console.debug("select2:selecting: ", event);
+                //   selectedAmount[event.params.args.data.id] = window.prompt('Enter an amount');
+                // })
+                .on("select2:select", (event) => {
+                    if (selectedEvent != undefined)
+                        selectedEvent(event.params.data);
+                    console.debug("select:select: selected item:", event.params.data);
+                });
+
+            $newSelect
+                .on("select2:opening", event => {
+                    // console.debug("opening:", event);
+                })
+                .on("keypress", event => {
+                    // console.debug('keypress event: %o', event);
+                    // console.debug('--> event.which: %d', event.which);
+                    if (_selectIsOpen) {
+                        return;
+                    }
+                    const charCode = event.which;
+                    if (
+                        !(event.altKey || event.ctrlKey || event.metaKey) &&
+                        ((charCode >= 48 && charCode <= 57) ||
+                            (charCode >= 65 && charCode <= 90) ||
+                            (charCode >= 97 && charCode <= 122))
+                    ) {
+                        $newSelect.select2("open");
+                        $("input.select2-search__field")
+                            .eq(0)
+                            .val(String.fromCharCode(charCode));
+                    }
+                });
+
+            if (event != undefined)
+                event();
+        }
+    });
+}
+
+function FillSelect2WithSubCategories(id, data, event, selectedEvent) {
+
+
+    let _selectIsOpen = false;
+    // const selectedAmount = {};
+    const MATCH_AT_START_OF_WORD = false;
+
+    var $selectElement = $(id);
+
+    // Select2'nin bulunduğu konumu al (ebeveyn elementi)
+    var $container = $selectElement.parent();
+
+    // Select2'yi yok et
+    $selectElement.select2('destroy');
+
+    // Select2 tarafından oluşturulan görsel arayüzü kaldır
+    $selectElement.next('.select2-container').remove();
+
+    // Önceki Select2 elementini DOM'dan kaldır
+    $selectElement.remove();
+
+    // Yeni bir <select> elementi oluştur
+    var $newSelect = $("<select></select>").addClass("form-control").addClass(id.replace(".", ""));
+    $newSelect.attr("name", id.replace(".", ""));
+
+    // Yeni <select> elementini eski elementin bulunduğu yere ekle
+    $container.append($newSelect);
+
+    // Yeni veri seti
+    var newData = [
+        {
+            "id": "-1",
+            "text": "Seçiniz"
+        }
+    ];
+
+    console.log(data);
+
+    data.forEach(function (item, index) {
+        newData.push({
+            "id": item.CATEGORYID,
+            "text": item.CATEGORYNAME
+        });
+    });
+
+    $newSelect.addClass(id);
+
+    $newSelect.on('select2:open', function (e) {
+        // Biraz gecikme ekleyerek, Select2'nin arama kutusunu DOM'a ekleme sürecini tamamlamasını bekleyin
+        setTimeout(function () {
+            // Select2'nin arama kutusuna odaklan
+            $('.select2-search__field').focus();
+        }, 0); // Gecikmeyi 0 olarak ayarlamak, bu işlemin "sonraki döngüde" gerçekleşmesini sağlar
+    });
+
+    const matchTextAndExtras = (params, item) => {
+        // `params.term` is the search term the user entered.
+        // `item.text` is the text that is displayed for the item object.
+        // `items.extras` is an optional array of extra values that should be matched if not match is found in `item.text`.
+        // console.debug("matchCustom(): params: %o; item %o", params, item);
+        let query = $.trim(params.term);
+        // If there is no search term, return all of the data.
+        if (!query || query.length < 2) {
+            $("body").addClass("noTerm");
+            // return null;
+            return item;
+        } else {
+            $("body").removeClass("noTerm");
+        }
+        // Do not display the item if there is no 'text' property (or if it's empty).
+        if (!$.trim(item.text)) {
+            return null;
+        }
+        query = query.replace(/([^0-9A-Z -])/gi, "\\$1");
+        if (MATCH_AT_START_OF_WORD) {
+            query = "\\b" + query;
+        }
+        // Try to match the search term, first in `item.text` and then in `item.extras`.
+        const queryRe = new RegExp(query, "ig");
+        if (item.text.search(queryRe) > -1) {
+            const modifiedItem = $.extend({}, item, true);
+            // Surround all matches of the query term with <span> elements.
+            modifiedItem.text = item.text.replace(queryRe, match => {
+                return "<mark>" + match + "</mark>";
+            });
+            return modifiedItem;
+        } else if (item.extras) {
+            const matchedExtra = item.extras.find(text => {
+                return text.search(queryRe) > -1;
+            });
+            if (matchedExtra) {
+                const modifiedItem = $.extend({}, item, true);
+                modifiedItem.text +=
+                    " <i>[" +
+                    matchedExtra.replace(queryRe, match => {
+                        return "<mark>" + match + "</mark>";
+                    }) +
+                    "]</i>";
+                return modifiedItem;
+            }
+        }
+        return null;
+    };
+
+    const renderItem = item => {
+        // console.log("renderItem(): item: %o", item);
+        if (item.text !== "") {
+            return $("<div>").html(item.text);
+        } else {
+            return "";
+        }
+    };
+
+    $newSelect.select2({
+        data: newData,
+        matcher: matchTextAndExtras,
+        dropdownParent: $container,
+        minimumInputLength: 0, // Don't use this: it prevents the dropdown from displaying any items until the user enters a query. Instead, matchCustom() contains logic to implement the same behavior.
+        selectOnClose: true,
+        //sorter: items => {
+        //    return items.reverse();
+        //},
+        templateResult: renderItem
+    });
+
+    $newSelect
+        .on("select2:open", event => {
+            // console.debug("open: ", event);
+            _selectIsOpen = true;
+        })
+        .on("select2:close", event => {
+            // console.debug("close: ", event);
+            _selectIsOpen = false;
+        })
+        // .on("select2:selecting", (event) => {
+        //   console.debug("select2:selecting: ", event);
+        //   selectedAmount[event.params.args.data.id] = window.prompt('Enter an amount');
+        // })
+        .on("select2:select", (event) => {
+            if (selectedEvent != undefined)
+                selectedEvent(event.params.data);
+            console.debug("select:select: selected item:", event.params.data);
+        });
+
+    $newSelect
+        .on("select2:opening", event => {
+            // console.debug("opening:", event);
+        })
+        .on("keypress", event => {
+            // console.debug('keypress event: %o', event);
+            // console.debug('--> event.which: %d', event.which);
+            if (_selectIsOpen) {
+                return;
+            }
+            const charCode = event.which;
+            if (
+                !(event.altKey || event.ctrlKey || event.metaKey) &&
+                ((charCode >= 48 && charCode <= 57) ||
+                    (charCode >= 65 && charCode <= 90) ||
+                    (charCode >= 97 && charCode <= 122))
+            ) {
+                $newSelect.select2("open");
+                $("input.select2-search__field")
+                    .eq(0)
+                    .val(String.fromCharCode(charCode));
+            }
+        });
+
+    if (event != undefined)
+        event();
+
+}
+
+$(function () {
+    // Kod buraya gelir
     var x = JSON.parse(window.localStorage.getItem("data")).Data;
     $(".userName").text(x.NAME + " " + x.SURNAME);
 
     PrintCounts();
-
-    //Proje bittiğinde burası aktifleştirilecek
-    //setInterval(function () {
-    //    PrintCounts();
-    //}, 10000);
-
 });
