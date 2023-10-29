@@ -7,7 +7,7 @@ namespace CafeMenuMvc.Services.Abstract
 {
     public interface IUserService
     {
-        Task<ResponseDto<MUser>> SignIn(UserLoginDto userDto);
+        Task<ResponseDto<UserParameter>> SignIn(UserLoginDto userDto);
         Task<ResponseDto<MUser>> Register(UserRegisterDto user);
     }
 }

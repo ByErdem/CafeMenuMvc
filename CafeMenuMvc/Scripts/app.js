@@ -1,25 +1,31 @@
 ﻿
 function CallRequest(link, data, event) {
+    var token = 'Bearer ' + localStorage.getItem("guid")
 
     if (data != undefined) {
-        $.ajax({
-            type: "POST",
-            url: link,
-            data: JSON.stringify(data),
-            contentType: 'application/json; charset=utf-8',
-            success: function (rsp) {
-                event(rsp);
-            },
-            error: function (req, status, error) {
 
-            }
+        $.ajax({
+            url: link,
+            type: 'POST',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', token);
+            },
+            data: data,
+            success: function (rsp) {
+                event(rsp)
+            },
+            error: function () { },
         });
+
     }
     else {
         $.ajax({
             type: "POST",
             url: link,
             contentType: 'application/json; charset=utf-8',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', token);
+            },
             success: function (rsp) {
                 event(rsp);
             },
@@ -29,6 +35,11 @@ function CallRequest(link, data, event) {
         });
     }
 }
+
+function ConvertToBase64(input) {
+    return btoa(unescape(encodeURIComponent(input)));
+}
+
 
 function UUIDV4() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -597,9 +608,11 @@ $(function () {
     var x = JSON.parse(window.localStorage.getItem("data")).Data;
     $(".userName").text(x.NAME + " " + x.SURNAME);
 
+    PrintCounts();
+
     //Proje bittiğinde burası aktifleştirilecek
-    setInterval(function () {
-        PrintCounts();
-    }, 10000);
+    //setInterval(function () {
+    //    PrintCounts();
+    //}, 10000);
 
 });

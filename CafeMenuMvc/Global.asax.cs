@@ -9,6 +9,8 @@ using System;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using CafeMenuMvc.Models.Extensions.Redis;
+using StackExchange.Redis;
 
 namespace CafeMenuMvc
 {
@@ -23,12 +25,21 @@ namespace CafeMenuMvc
             Mapper.Initialize(opt => opt.AddProfile<MappingProfile>());
 
             var builder = new ContainerBuilder();
+
+            //builder.RegisterInstance(RedisConnectionFactory.Connection)
+            //       .As<ConnectionMultiplexer>()
+            //       .SingleInstance();
+
+            builder.RegisterModule<RedisModule>();
+
             builder.RegisterType<EncryptionManager>().As<IEncryptionService>().AsSelf().SingleInstance();
             builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<CategoryManager>().As<ICategoryService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductManager>().As<IProductService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<DashboardManager>().As<IDashboardService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<ProductPropertyManager>().As<IProductPropertyService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<TokenManager>().As<ITokenService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<RedisCacheManager>().As<IRedisCacheService>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
@@ -48,7 +59,10 @@ namespace CafeMenuMvc
 
             var container = builder.Build();
             DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
-            
+
+            var redisService = DependencyResolver.Current.GetService<IRedisCacheService>();
+            var tokenService = DependencyResolver.Current.GetService<ITokenService>();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters, redisService, tokenService);
         }
     }
 }

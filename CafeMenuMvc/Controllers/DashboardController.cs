@@ -1,4 +1,5 @@
-﻿using CafeMenuMvc.Services.Abstract;
+﻿using CafeMenuMvc.Models.Attributes;
+using CafeMenuMvc.Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,13 @@ namespace CafeMenuMvc.Controllers
             _dashboardService = dashboardService;
         }
 
+
         public ActionResult Index()
         {
             return View();
         }
+
+        [CustomAuthorize]
 
         public async Task<ActionResult> GetCounts()
         {

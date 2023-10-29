@@ -53,6 +53,7 @@
     <Compile Include="Dtos\ProductPropertyDto.cs" />
     <Compile Include="Dtos\ResponseDto.cs" />
     <Compile Include="Dtos\UserLoginDto.cs" />
+    <Compile Include="Dtos\UserParameter.cs" />
     <Compile Include="Dtos\UserRegisterDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

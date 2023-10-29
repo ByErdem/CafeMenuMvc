@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 
 namespace CafeMenuMvc.Services.Concrete
@@ -43,7 +42,6 @@ namespace CafeMenuMvc.Services.Concrete
                 newCategory.CREATORUSERID = 1;
                 newCategory.CREATEDDATE = DateTime.Now;
                 newCategory.ISDELETED = false;
-
 
                 entity.CATEGORY.Add(newCategory);
                 await entity.SaveChangesAsync();
@@ -174,7 +172,6 @@ namespace CafeMenuMvc.Services.Concrete
 
             return rsp;
         }
-
 
         public async Task<ResponseDto<CategoryDto>> Get(CategoryDto dto)
         {

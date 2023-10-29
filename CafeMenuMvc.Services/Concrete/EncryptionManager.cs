@@ -81,7 +81,7 @@ namespace CafeMenuMvc.Services.Concrete
 
         public string Base64Decode(string plainText)
         {
-            var base64EncodedBytes = System.Convert.FromBase64String(plainText);
+            var base64EncodedBytes = Convert.FromBase64String(plainText);
             return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
