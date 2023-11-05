@@ -604,9 +604,6 @@ function FillSelect2WithSubCategories(id, data, event, selectedEvent) {
 }
 
 $(function () {
-    // Kod buraya gelir
-    var x = JSON.parse(window.localStorage.getItem("data")).Data;
-    $(".userName").text(x.NAME + " " + x.SURNAME);
 
     PrintCounts();
 

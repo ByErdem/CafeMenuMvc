@@ -12,10 +12,10 @@ namespace CafeMenuMvc
             filters.Add(new HandleErrorAttribute());
         }
 
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters, IRedisCacheService redisCacheService, ITokenService tokenService)
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters, IRedisCacheService redisCacheService)
         {
             filters.Add(new HandleErrorAttribute());
-            filters.Add(new CustomAuthorizeFilter(redisCacheService,tokenService));
+            filters.Add(new CustomAuthorizeFilter(redisCacheService));
         }
     }
 }

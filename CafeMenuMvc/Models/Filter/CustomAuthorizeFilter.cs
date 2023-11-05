@@ -10,21 +10,25 @@ namespace CafeMenuMvc.Models.Filter
     public class CustomAuthorizeFilter : IAuthorizationFilter
     {
         private readonly IRedisCacheService _redisCacheService;
-        private readonly ITokenService _tokenService;
 
-        public CustomAuthorizeFilter(IRedisCacheService redisCacheService, ITokenService tokenService)
+        public CustomAuthorizeFilter(IRedisCacheService redisCacheService)
         {
             _redisCacheService = redisCacheService;
-            _tokenService = tokenService;
         }
 
         public void OnAuthorization(AuthorizationContext filterContext)
         {
             var exists = _redisCacheService.Any();
-            if (!exists)
+
+            if(!filterContext.RouteData.Values.ContainsValue("Login"))
             {
-                filterContext.Result = new HttpUnauthorizedResult();
+                if (!exists)
+                {
+                    filterContext.Result = new HttpUnauthorizedResult();
+                }
             }
+
+
         }
     }
 }

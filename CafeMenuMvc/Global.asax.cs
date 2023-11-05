@@ -9,8 +9,8 @@ using System;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using CafeMenuMvc.Models.Extensions.Redis;
 using StackExchange.Redis;
+using System.Configuration;
 
 namespace CafeMenuMvc
 {
@@ -26,12 +26,15 @@ namespace CafeMenuMvc
 
             var builder = new ContainerBuilder();
 
-            //builder.RegisterInstance(RedisConnectionFactory.Connection)
-            //       .As<ConnectionMultiplexer>()
-            //       .SingleInstance();
+            builder.RegisterInstance(ConnectionMultiplexer.Connect(ConfigurationManager.AppSettings["redisConnectionString"]))
+                   .As<IConnectionMultiplexer>()
+                   .SingleInstance();
 
-            builder.RegisterModule<RedisModule>();
+            builder.Register(c => c.Resolve<ConnectionMultiplexer>().GetDatabase())
+                   .As<IDatabase>();
 
+            builder.RegisterType<ConfigurationService>().As<IConfigurationService>().AsSelf().SingleInstance();
+            builder.RegisterType<RabbitMQManager>().As<IRabbitMQService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<EncryptionManager>().As<IEncryptionService>().AsSelf().SingleInstance();
             builder.RegisterType<UserManager>().As<IUserService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<CategoryManager>().As<ICategoryService>().AsSelf().InstancePerLifetimeScope();
@@ -62,7 +65,7 @@ namespace CafeMenuMvc
 
             var redisService = DependencyResolver.Current.GetService<IRedisCacheService>();
             var tokenService = DependencyResolver.Current.GetService<ITokenService>();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters, redisService, tokenService);
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters, redisService);
         }
     }
 }

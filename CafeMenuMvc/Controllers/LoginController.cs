@@ -14,7 +14,7 @@ namespace CafeMenuMvc.Controllers
 
 
         public LoginController(IUserService userService)
-        { 
+        {
             _userService = userService;
         }
 
@@ -31,17 +31,7 @@ namespace CafeMenuMvc.Controllers
         public async Task<ActionResult> SignIn(UserLoginDto user)
         {
             ResponseDto<UserParameter> result = null;
-
-            try
-            {
-                result = await _userService.SignIn(user);
-            }
-            catch (System.Exception ex)
-            {
-
-            }
-
-
+            result = await _userService.SignIn(user);
             return Json(result);
         }
 
