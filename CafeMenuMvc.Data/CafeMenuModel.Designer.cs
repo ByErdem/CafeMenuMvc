@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Erdem\Desktop\CafeMenuMvc\CafeMenuMvc.Data\CafeMenuModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\byerd\source\repos\CafeMenuMvc\CafeMenuMvc.Data\CafeMenuModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

@@ -16,10 +16,20 @@ namespace CafeMenuMvc.Data
     public partial class CafeMenuEntities : DbContext
     {
         public CafeMenuEntities()
-            : base("name=CafeMenuEntities")
+            : base(ConnectionString()) //base("name=CafeMenuEntities")
         {
         }
-    
+
+        public static string ConnectionString()
+        {
+            string server = "DESKTOP-JCSFFJ8";
+            string databaseName = "CafeMenu";
+            string userName = "sa";
+            string password = "123";
+            string metaData = "metadata=res://*/CafeMenuModel.csdl|res://*/CafeMenuModel.ssdl|res://*/CafeMenuModel.msl";
+            return $"{metaData};provider=System.Data.SqlClient;provider connection string=\"data source={server};database={databaseName};user id={userName};password={password};MultipleActiveResultSets=True;App=EntityFramework\"";
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();

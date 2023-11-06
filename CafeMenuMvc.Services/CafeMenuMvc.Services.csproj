@@ -52,9 +52,6 @@
     <Reference Include="Pipelines.Sockets.Unofficial, Version=1.0.0.0, Culture=neutral, PublicKeyToken=42ea0a778e13fbe2, processorArchitecture=MSIL">
       <HintPath>..\packages\Pipelines.Sockets.Unofficial.2.2.8\lib\net472\Pipelines.Sockets.Unofficial.dll</HintPath>
     </Reference>
-    <Reference Include="RabbitMQ.Client, Version=6.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\packages\RabbitMQ.Client.6.6.0\lib\net462\RabbitMQ.Client.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis, Version=2.0.0.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.2.6.122\lib\net472\StackExchange.Redis.dll</HintPath>
     </Reference>
@@ -104,6 +101,7 @@
     <Compile Include="Abstract\IConfigurationService.cs" />
     <Compile Include="Abstract\IDashboardService.cs" />
     <Compile Include="Abstract\IEncryptionService.cs" />
+    <Compile Include="Abstract\IHttpService.cs" />
     <Compile Include="Abstract\IProductPropertyService.cs" />
     <Compile Include="Abstract\IProductService.cs" />
     <Compile Include="Abstract\IRabbitMQService.cs" />
@@ -114,6 +112,7 @@
     <Compile Include="Concrete\ConfigurationService.cs" />
     <Compile Include="Concrete\DashboardManager.cs" />
     <Compile Include="Concrete\EncryptionManager.cs" />
+    <Compile Include="Concrete\HttpManager.cs" />
     <Compile Include="Concrete\ProductManager.cs" />
     <Compile Include="Concrete\ProductPropertyManager.cs" />
     <Compile Include="Concrete\RabbitMQManager.cs" />

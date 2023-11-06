@@ -43,6 +43,7 @@ namespace CafeMenuMvc
             builder.RegisterType<ProductPropertyManager>().As<IProductPropertyService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<TokenManager>().As<ITokenService>().AsSelf().InstancePerLifetimeScope();
             builder.RegisterType<RedisCacheManager>().As<IRedisCacheService>().AsSelf().InstancePerLifetimeScope();
+            builder.RegisterType<HttpManager>().As<IHttpService>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 

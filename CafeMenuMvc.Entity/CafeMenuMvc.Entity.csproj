@@ -51,6 +51,7 @@
     <Compile Include="Dtos\NameValueDto.cs" />
     <Compile Include="Dtos\ProductDto.cs" />
     <Compile Include="Dtos\ProductPropertyDto.cs" />
+    <Compile Include="Dtos\RabbitDto.cs" />
     <Compile Include="Dtos\ResponseDto.cs" />
     <Compile Include="Dtos\UserLoginDto.cs" />
     <Compile Include="Dtos\UserParameter.cs" />

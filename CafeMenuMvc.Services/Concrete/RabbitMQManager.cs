@@ -1,5 +1,6 @@
-﻿using CafeMenuMvc.Services.Abstract;
-using RabbitMQ.Client;
+﻿using CafeMenuMvc.Entity.Dtos;
+using CafeMenuMvc.Services.Abstract;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,16 @@ namespace CafeMenuMvc.Services.Concrete
     public class RabbitMQManager : IRabbitMQService
     {
         private readonly IConfigurationService _configurationService;
+        private readonly IHttpService _httpService;
         private readonly string _connectionString;
 
-        public RabbitMQManager(IConfigurationService configurationService)
+
+        public RabbitMQManager(IConfigurationService configurationService, IHttpService httpService)
         {
 
             _configurationService = configurationService;
             _connectionString = _configurationService.GetSetting("rabbitMQConnectionString");
+            _httpService = httpService;
         }
 
 
@@ -30,29 +34,13 @@ namespace CafeMenuMvc.Services.Concrete
 
         public async Task<int> SendMessage(string header, string message)
         {
-            try
+            var dto = new RabbitDto
             {
-                await Task.Run(() =>
-                {
-                    var factory = new ConnectionFactory();
-                    factory.Uri = new Uri(_connectionString);
-                    using (var conn = factory.CreateConnection())
-                    {
-                        var channel = conn.CreateModel();
-                        channel.QueueDeclare(header, true, false, false);
-                        var body = Encoding.UTF8.GetBytes(message);
-                        channel.BasicPublish(String.Empty, header, null, body);
-                    }
-                });
-
-                return 1;
-
-            }
-            catch (Exception)
-            {
-                return 0;
-            }
-
+                Header = header,
+                Message = message
+            };
+            var result = await _httpService.SendHttpPostRequestAsync("http://localhost:5131/api/controller/SendMessage", JsonConvert.SerializeObject(dto));
+            return result;
         }
     }
 }
