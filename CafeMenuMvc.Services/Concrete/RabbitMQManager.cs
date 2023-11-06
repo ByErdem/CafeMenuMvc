@@ -13,14 +13,14 @@ namespace CafeMenuMvc.Services.Concrete
     {
         private readonly IConfigurationService _configurationService;
         private readonly IHttpService _httpService;
-        private readonly string _connectionString;
+        private readonly string _rabbitMQApiUrl;
 
 
         public RabbitMQManager(IConfigurationService configurationService, IHttpService httpService)
         {
 
             _configurationService = configurationService;
-            _connectionString = _configurationService.GetSetting("rabbitMQConnectionString");
+            _rabbitMQApiUrl = _configurationService.GetSetting("rabbitMQApiUrl");
             _httpService = httpService;
         }
 
@@ -39,7 +39,7 @@ namespace CafeMenuMvc.Services.Concrete
                 Header = header,
                 Message = message
             };
-            var result = await _httpService.SendHttpPostRequestAsync("http://localhost:5131/api/controller/SendMessage", JsonConvert.SerializeObject(dto));
+            var result = await _httpService.SendHttpPostRequestAsync(_rabbitMQApiUrl + "Rabbit/SendMessage", JsonConvert.SerializeObject(dto));
             return result;
         }
     }

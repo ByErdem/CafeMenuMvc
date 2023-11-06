@@ -6,7 +6,7 @@ using System.Text;
 namespace CafeMenuMvc.RabbitMQAPI.Controllers
 {
     [ApiController]
-    [Route("api/controller")]
+    [Route("api/controller/Rabbit")]
     public class RabbitController : ControllerBase
     {
         private readonly IConfiguration _configuration;
