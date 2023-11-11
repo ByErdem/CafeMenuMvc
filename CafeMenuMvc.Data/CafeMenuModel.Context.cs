@@ -26,7 +26,8 @@ namespace CafeMenuMvc.Data
             string databaseName = "CafeMenu";
             string userName = "sa";
             string password = "123";
-            string metaData = "metadata=res://*/CafeMenuModel.csdl|res://*/CafeMenuModel.ssdl|res://*/CafeMenuModel.msl";
+            string model = "CafeMenuModel";
+            string metaData = "metadata=res://*/" + model + ".csdl|res://*/" + model + ".ssdl|res://*/" + model + ".msl";
             return $"{metaData};provider=System.Data.SqlClient;provider connection string=\"data source={server};database={databaseName};user id={userName};password={password};MultipleActiveResultSets=True;App=EntityFramework\"";
         }
 

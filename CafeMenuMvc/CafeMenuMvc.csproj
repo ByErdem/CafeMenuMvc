@@ -196,8 +196,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Attributes\CustomAuthorize.cs" />
-    <Compile Include="Models\Extensions\Redis\RedisConnectionFactory.cs" />
-    <Compile Include="Models\Extensions\Redis\RedisModule.cs" />
     <Compile Include="Models\Filter\CustomAuthorizeFilter.cs" />
     <Compile Include="Models\Profiles\MappingProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
